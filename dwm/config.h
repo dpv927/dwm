@@ -1,9 +1,15 @@
+#include "selfrestart.h"
+
 /* Patch: Vanity gaps. Gaps between windows */ 
 static const unsigned int gappih    = 20;   /* horiz inner gap between windows */
 static const unsigned int gappiv    = 20;   /* vert inner gap between windows */
 static const unsigned int gappoh    = 20;   /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 20;   /* vert outer gap between windows and screen edge */
 static const int smartgaps          = 0;    /* 1 means no outer gap when there is only one window */
+
+/* Patch: Statuspadding. Inner padding for the bar */
+static const int horizpadbar        = 0;    /* horizontal padding for statusbar */
+static const int vertpadbar         = 25;    /* vertical padding for statusbar */
 
 /* Default dwm settings */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -82,7 +88,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-    { MODKEY|ShiftMask,             XK_q,      quit,            {0} },
+    { MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+    { MODKEY|ShiftMask,             XK_r,      self_restart,   {0} },
 
     /* Vanity gaps */
     { MODKEY,                       XK_h,      incrgaps,       {.i = +1 } },
@@ -100,7 +107,7 @@ static const Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_y,      incrohgaps,     {.i = +1 } },
 	{ MODKEY|Mod4Mask,              XK_o,      incrohgaps,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_y,      incrovgaps,     {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_o,      incrovgaps,     {.i = -1 } },    
+	{ MODKEY|ShiftMask,             XK_o,      incrovgaps,     {.i = -1 } },  
 
     /* Tagkeys */
 	TAGKEYS(                        XK_1,                      0)

@@ -5,7 +5,7 @@
 killall -9 xsettingsd
 
 # Restore wallpapper
-feh --no-fehbg --bg-fill "$HOME/Pictures/XeroCatppuccin4K.png"
+feh --no-fehbg --bg-fill "$HOME/Pictures/suns.png"
 
 # Load X settings
 xsettingsd --config="$HOME/.config/dwm/config/xsettingsd" &
