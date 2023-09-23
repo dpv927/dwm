@@ -14,5 +14,8 @@ xrdb -merge ~/.Xresources
 # Start dwm bar utils
 sh "$HOME/.config/dwm/scripts/dwm-bar/dwm_bar.sh" &
 
+# Start picom compositor
+picom &
+
 # Start dwm
 while type dwm >/dev/null; do dwm && continue || break; done

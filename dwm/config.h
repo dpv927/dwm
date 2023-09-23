@@ -12,11 +12,11 @@ static const int horizpadbar        = 0;    /* horizontal padding for statusbar 
 static const int vertpadbar         = 40;    /* vertical padding for statusbar */
 
 /* Default dwm settings */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 8;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Jetbrains Mono Nerd Font:size=20" };
+static const char *fonts[]          = { "Jetbrains Mono Nerd Font:size=12" };
 static const char dmenufont[]       = "Ubuntu Nerd Font:size=22";
 
 /* Color theme (fg - bg - border) */
