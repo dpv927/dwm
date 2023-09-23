@@ -11,5 +11,8 @@ feh --no-fehbg --bg-fill "$HOME/Pictures/dwm_layers.png"
 xsettingsd --config="$HOME/.config/dwm/config/xsettingsd" &
 xrdb -merge ~/.Xresources
 
+# Start dwm bar utils
+sh "$HOME/.config/dwm/scripts/dwm-bar/dwm_bar.sh" &
+
 # Start dwm
 while type dwm >/dev/null; do dwm && continue || break; done

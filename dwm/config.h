@@ -9,14 +9,14 @@ static const int smartgaps          = 0;    /* 1 means no outer gap when there i
 
 /* Patch: Statuspadding. Inner padding for the bar */
 static const int horizpadbar        = 0;    /* horizontal padding for statusbar */
-static const int vertpadbar         = 25;    /* vertical padding for statusbar */
+static const int vertpadbar         = 40;    /* vertical padding for statusbar */
 
 /* Default dwm settings */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Jetbrains Mono Nerd Font:size=22" };
+static const char *fonts[]          = { "Jetbrains Mono Nerd Font:size=20" };
 static const char dmenufont[]       = "Ubuntu Nerd Font:size=22";
 
 /* Color theme (fg - bg - border) */
@@ -88,7 +88,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-    { MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+    { MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("killall dwm") },
     { MODKEY|ShiftMask,             XK_r,      restart,        {0} },
 
     /* Vanity gaps: modify window gaps */
