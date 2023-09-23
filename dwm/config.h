@@ -1,50 +1,102 @@
 #pragma once
+#include <X11/keysym.h>
+#include "dwm.h"
+#include "objects.h"
+#include "fibonacci.h"
+#include "themes/catppuccin.h"
 
 /* Patch: Vanity gaps. Gaps between windows */ 
-static const unsigned int gappih    = 20;   /* horiz inner gap between windows */
-static const unsigned int gappiv    = 20;   /* vert inner gap between windows */
-static const unsigned int gappoh    = 20;   /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 20;   /* vert outer gap between windows and screen edge */
-static const int smartgaps          = 0;    /* 1 means no outer gap when there is only one window */
+static const unsigned int gappih    = 20;   
+static const unsigned int gappiv    = 20;   
+static const unsigned int gappoh    = 20;
+static const unsigned int gappov    = 20;
+static const int smartgaps          = 0;    
 
-/* Patch: Statuspadding. Inner padding for the bar */
-static const int horizpadbar        = 0;    /* horizontal padding for statusbar */
-static const int vertpadbar         = 40;    /* vertical padding for statusbar */
+/* Patch: Statuspadding. Bar inner padding */
+static const int horizpadbar        = 0;
+static const int vertpadbar         = 40;
 
-/* Default dwm settings */
-static const unsigned int borderpx  = 8;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Jetbrains Mono Nerd Font:size=12" };
-static const char dmenufont[]       = "Ubuntu Nerd Font:size=22";
+/* Some Dwm settings */
+static const unsigned int borderpx  = 8;
+static const unsigned int snap      = 32;
+static const int showbar            = 1;
+static const int topbar             = 1;
 
-/* Color theme (fg - bg - border) */
-static const char *colors[][3]      = {
-	[SchemeNorm] = { "#c6d0f5", "#292d3d", "#46495e" },
-	[SchemeSel]  = { "#ca9ee6", "#292d3d", "#46495e" },
+/* In the fonts[] array you can define several fonts if you want.
+ * This can be used to be able to put more than one type of font 
+ * at the statusbar tags or text.
+ *
+ * At the fonts[] array, you can define various fonts  
+ * you want to have some backup fonts
+ * * * * */
+static const char* fonts[]          = { "Jetbrains Mono Nerd Font:size=12" };
+static const char  dmenufont[]      = "Jetbrains Mono Nerd Font:size=12";
+
+/* Bar color theme. Defines the color of the bar and windows colors.
+ * The order is the following one: {foreground, background, border}.
+ *
+ * - <SchemeNorm>: Scheme to apply to non-focused windows.
+ * - <SchemeSel>: Scheme to apply to focused windows.
+ *
+ *  Be aware that this colors will also be applied at the dwm status
+ *  bar and its items.
+ * * * * */
+static const char* colors[][3] = {
+	[SchemeNorm] = { white,   black, border },
+	[SchemeSel]  = { title,   black, border },
 };
 
-/* tagging */
-static const char *tags[] = { "", "", "", "", "", "", "" };
+/* Bar tag colors. Defines the foreground and background colors
+ * of the statusbar tags when they are selected, overwriting those
+ * colors from colors[SchemeSel].
+ *
+ * Each pair { "#col1", "#col2" } of the array indicates that
+ * the foreground of the tag will be #col1 and the background #col2.
+ * * * * */
+static const char *tagsel[][2] = {
+	{ magenta,  active },
+    { yellow,   active },
+    { green,    active },
+    { red,      active },
+    { blue,     active },
+    { cyan,     active },
+    { magenta,  active }
+};
 
-/* Applications rules */
+/* The tags[] array defines the icons or characters that will
+ * represent each of the Dwm workspaces in the statusbar. 
+ * * * * */
+static const char *tags[] = { "  ", "  ", "  ", "  ", "  ", "  ", "  " };
+
+/* This array defines the rules for behavior different from
+ * the usual behavior of certain applications. 
+ *
+ * An example can be to make an application open in tiled 
+ * (normal) or floating mode. 
+ * * * * */
 static const Rule rules[] = {
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
-/* layout(s) */
-static const float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+/* Layout(s) constants */
+static const float mfact     = 0.5;  // factor of master area size [0.05..0.95]
+static const int nmaster     = 1;    // number of clients in master area
+static const int resizehints = 1;    // 1 means respect size hints in tiled resizals
+static const int lockfullscreen = 1; // 1 will force focus on the fullscreen window
 
+/* The array layouts[] defines the possible layouts that can be applied 
+ * to a Dwm desktop. 
+ *
+ * The pairs { "rep", func} define a layout with a "rep" representation in the 
+ * statusbar and func will be the function to invoke to organize the windows. 
+ * * * * */
 static const Layout layouts[] = {
-	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+    { "[]=",      tile },
+	{ "><>",      NULL },
+    { "[\\]",     dwindle },
+    { "[@]",      spiral },
 	{ "[M]",      monocle },
 };
 
@@ -56,15 +108,16 @@ static const Layout layouts[] = {
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
-/* helper for spawning shell commands in the pre dwm-5.0 fashion */
+/* Define a shell command helper */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
-/* commands */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", "#222222", "-nf", "#bbbbbb", "-sb", "#005577", "-sf", "#eeeeee", NULL };
-
+/* Definition of keybidings. With these key combinations you
+ * open and close applications, adjust window gaps and restart
+ * or kill Dwm. 
+ * * * * */
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_d,      spawn,          SHCMD("dmenu_run") },
 	{ MODKEY,	                    XK_Return, spawn,          SHCMD("st") },
 	{ MODKEY|ShiftMask,   		    XK_f,	   spawn,          SHCMD("firefox") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -82,8 +135,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
@@ -121,8 +172,9 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 };
 
-/* button definitions */
-/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+/* Definition of events that are executed when clicking in
+ * different ways. 
+ * * * * */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
