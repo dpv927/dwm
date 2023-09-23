@@ -1,4 +1,4 @@
-#include "selfrestart.h"
+#pragma once
 
 /* Patch: Vanity gaps. Gaps between windows */ 
 static const unsigned int gappih    = 20;   /* horiz inner gap between windows */
@@ -16,7 +16,7 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Ubuntu Nerd Font:size=22" };
+static const char *fonts[]          = { "Jetbrains Mono Nerd Font:size=22" };
 static const char dmenufont[]       = "Ubuntu Nerd Font:size=22";
 
 /* Color theme (fg - bg - border) */
@@ -89,9 +89,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
     { MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-    { MODKEY|ShiftMask,             XK_r,      self_restart,   {0} },
+    { MODKEY|ShiftMask,             XK_r,      restart,        {0} },
 
-    /* Vanity gaps */
+    /* Vanity gaps: modify window gaps */
     { MODKEY,                       XK_h,      incrgaps,       {.i = +1 } },
 	{ MODKEY,                       XK_l,      incrgaps,       {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_h,      incrogaps,      {.i = +1 } },
@@ -109,7 +109,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_y,      incrovgaps,     {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_o,      incrovgaps,     {.i = -1 } },  
 
-    /* Tagkeys */
+    /* Tag keys */
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -137,4 +137,3 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
