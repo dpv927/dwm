@@ -82,6 +82,7 @@ void incrihgaps(const Arg *arg);
 void incrivgaps(const Arg *arg);
 void togglegaps(const Arg *arg);
 void defaultgaps(const Arg *arg);
+void fullscreen(const Arg *arg);
 void setlayout(const Arg *arg);
 void setmfact(const Arg *arg);
 void setup(void);

@@ -24,9 +24,13 @@
 #include "objects.h"
 #include "dwm.h"
 
-/* variables */
+/* compile-time check if all tags fit into an unsigned int bit array. */
+struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+
+/* Shared variables */
 static const char broken[] = "broken";
 static char stext[256];
+Layout *last_layout;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar height */
@@ -34,6 +38,15 @@ static int enablegaps = 1;   /* enables gaps, used by togglegaps */
 static int lrpad;            /* sum of left and right padding for text */
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
+static Atom wmatom[WMLast], netatom[NetLast];
+static int running = 1;
+static Cur *cursor[CurLast];
+static Clr **scheme;
+static Clr **tagscheme;
+static Display *dpy;
+static Drw *drw;
+static Monitor *mons, *selmon;
+static Window root, wmcheckwin;
 static void (*handler[LASTEvent]) (XEvent *) = {
 	[ButtonPress] = buttonpress,
 	[ClientMessage] = clientmessage,
@@ -50,20 +63,11 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 	[PropertyNotify] = propertynotify,
 	[UnmapNotify] = unmapnotify
 };
-static Atom wmatom[WMLast], netatom[NetLast];
-static int running = 1;
-static Cur *cursor[CurLast];
-static Clr **scheme;
-static Clr **tagscheme;
-static Display *dpy;
-static Drw *drw;
-static Monitor *mons, *selmon;
-static Window root, wmcheckwin;
+/* End of shared variables */
 
-/* compile-time check if all tags fit into an unsigned int bit array. */
-struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
 
 /* function implementations */
+
 void
 applyrules(Client *c)
 {
@@ -505,8 +509,6 @@ drawbar(Monitor *m)
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon) { /* status is only drawn on selected monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
-		//tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
-		//drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
         tw = TEXTW(stext);
 		drw_text(drw, m->ww - tw, 0, tw, bh, lrpad / 2, stext, 0);
 	}
@@ -1290,6 +1292,11 @@ setfullscreen(Client *c, int fullscreen)
 	}
 }
 
+void 
+fullscreen(const Arg *arg) {
+	if (selmon->sel) { setfullscreen(selmon->sel, !selmon->sel->isfullscreen); }
+}
+
 void
 setgaps(int oh, int ov, int ih, int iv)
 {
@@ -2049,20 +2056,28 @@ zoom(const Arg *arg)
 
 int main(int argc, char *argv[]) {
 	
+	/* Die showing version or correct usage */
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)
 		die("usage: dwm [-v]");
+	
+	/* Check if the current locale is supported */
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
+	
+	/* Check if we can open X display */
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
+	
 	checkotherwm();
 	setup();
+
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
 		die("pledge");
 #endif /* __OpenBSD__ */
+	
 	scan();
 	run();
 	cleanup();
