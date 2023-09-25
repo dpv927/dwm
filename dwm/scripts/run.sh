@@ -1,21 +1,26 @@
 #!/bin/bash
 # by @dpv927
 
-# Kill applications if already running
-killall -9 xsettingsd
+DWM_DIR="${HOME}/.config/dwm";
+WALLPAPER_DIR="${DWM_DIR}/resources"
+CONFIG_DIR="${DWM_DIR}/config"
+SCRIPTS_DIR="${DWM_DIR}/scripts"
 
-# Restore wallpapper
-feh --no-fehbg --bg-fill "$HOME/Pictures/dwm_layers.png"
+# Restore wallpaper
+feh --no-fehbg --bg-fill "${WALLPAPER_DIR}/wallpaper.png"
 
 # Load X settings
-xsettingsd --config="$HOME/.config/dwm/config/xsettingsd" &
+killall xsettingsd
+xsettingsd --config="${CONFIG_DIR}/xsettingsd" &
 xrdb -merge ~/.Xresources
 
 # Start dwm bar utils
-sh "$HOME/.config/dwm/scripts/dwm-bar/dwm_bar.sh" &
+sh "${SCRIPTS_DIR}/bar.sh" &
 
 # Start picom compositor
 picom &
 
 # Start dwm
-while type dwm >/dev/null; do dwm && continue || break; done
+while type dwm >/dev/null; do
+    dwm && continue || break;
+done
