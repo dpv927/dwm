@@ -1,6 +1,10 @@
 import psutil
 import time
 
+# Define the output color
+blue="#8cacee"
+reset="#c6d0f5"
+
 def net_data(interval=1):
     pre = psutil.net_io_counters()
     time.sleep(interval)
@@ -34,7 +38,7 @@ def net_data(interval=1):
         runit = "Mb/s"
 
     # Print results 
-    print(f" {drecv:.2f} {runit}  {dsent:.2f} {sunit}")
+    print(f"^c{blue}^ ^c{reset}^{drecv:.2f} {runit} ^c{blue}^ ^c{reset}^{dsent:.2f} {sunit}")
 
 if __name__ == "__main__":
     net_data()
