@@ -36,6 +36,7 @@ void detachstack(Client *c);
 Monitor *dirtomon(int dir);
 void drawbar(Monitor *m);
 void drawbars(void);
+int drawstatusbar(Monitor *m, int bh, char* text);
 void enternotify(XEvent *e);
 void expose(XEvent *e);
 void focus(Client *c);

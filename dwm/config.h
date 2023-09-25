@@ -5,6 +5,12 @@
 #include "fibonacci.h"
 #include "themes/catppuccin.h"
 
+/* Patch: Underline tags */
+static const unsigned int ulinepad	    = 2;
+static const unsigned int ulinestroke	  = 3;
+static const unsigned int ulinevoffset	= 0;
+static const int ulineall 		          = 0;
+
 /* Patch: Vanity gaps. Gaps between windows */ 
 static const unsigned int gappih    = 10;   
 static const unsigned int gappiv    = 10;   

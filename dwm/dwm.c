@@ -29,7 +29,7 @@ struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
 
 /* Shared variables */
 static const char broken[] = "broken";
-static char stext[256];
+static char stext[1024];
 Layout *last_layout;
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
@@ -68,9 +68,8 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 
 /* function implementations */
 
-void
-applyrules(Client *c)
-{
+void applyrules(Client *c) {
+
 	const char *class, *instance;
 	unsigned int i;
 	const Rule *r;
@@ -261,10 +260,9 @@ checkotherwm(void)
 	XSync(dpy, False);
 }
 
-void
-cleanup(void)
-{
-	Arg a = {.ui = ~0};
+void cleanup(void) {
+	
+  Arg a = {.ui = ~0};
 	Layout foo = { "", NULL };
 	Monitor *m;
 	size_t i;
@@ -279,7 +277,7 @@ cleanup(void)
 		cleanupmon(mons);
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors); i++)
+	for (i = 0; i < LENGTH(colors)+1; i++)
 		free(scheme[i]);
 	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
@@ -494,9 +492,8 @@ dirtomon(int dir)
 	return m;
 }
 
-void
-drawbar(Monitor *m)
-{
+void drawbar(Monitor *m) {
+
 	int x, w, tw = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
@@ -508,9 +505,10 @@ drawbar(Monitor *m)
 
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon) { /* status is only drawn on selected monitor */
-		drw_setscheme(drw, scheme[SchemeNorm]);
-        tw = TEXTW(stext);
-		drw_text(drw, m->ww - tw, 0, tw, bh, lrpad / 2, stext, 0);
+		//drw_setscheme(drw, scheme[SchemeNorm]);
+    //    tw = TEXTW(stext);
+		//drw_text(drw, m->ww - tw, 0, tw, bh, lrpad/2, stext, 0);
+    tw = m->ww - drawstatusbar(m, bh, stext);
 	}
 
 	for (c = m->clients; c; c = c->next) {
@@ -521,10 +519,15 @@ drawbar(Monitor *m)
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
 		w = TEXTW(tags[i]);
-		//drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_setscheme(drw, (m->tagset[m->seltags] & 1 << i ? tagscheme[i] : scheme[SchemeNorm]));
+		
+    // Draw tag
+    drw_setscheme(drw, (m->tagset[m->seltags] & 1 << i ? tagscheme[i] : scheme[SchemeNorm]));
+    drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 
-        drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+    // Draw underline under tag
+    if (ulineall || m->tagset[m->seltags] & 1 << i)
+		  drw_rect(drw, x + ulinepad, bh - ulinestroke - ulinevoffset, w - (ulinepad * 2), ulinestroke, 1, 0);
+
 		if (occ & 1 << i)
 			drw_rect(drw, x + boxs, boxs, boxw, boxw,
 				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
@@ -549,13 +552,116 @@ drawbar(Monitor *m)
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
 }
 
-void
-drawbars(void)
-{
+void drawbars(void) {
 	Monitor *m;
-
 	for (m = mons; m; m = m->next)
 		drawbar(m);
+}
+
+int drawstatusbar(Monitor *m, int bh, char* stext) {
+
+  int ret, i, w, x, len;
+	short isCode = 0;
+	char *text;
+	char *p;
+
+	len = strlen(stext) + 1 ;
+	if (!(text = (char*) malloc(sizeof(char)*len)))
+		die("malloc");
+	p = text;
+	memcpy(text, stext, len);
+
+	/* compute width of the status text */
+	w = 0;
+	i = -1;
+	while (text[++i]) {
+	  if (text[i] == '^') {
+		  if (!isCode) {
+			  isCode = 1;
+				text[i] = '\0';
+				w += TEXTW(text) - lrpad;
+				text[i] = '^';
+        if (text[++i] == 'f')
+					w += atoi(text + ++i);
+			} else {
+  			isCode = 0;
+				text = text + i + 1;
+				i = -1;
+			}
+		}
+	}
+	if (!isCode)
+		w += TEXTW(text) - lrpad;
+	else
+		isCode = 0;
+	text = p;
+
+	w += 2; /* 1px padding on both sides */
+	ret = x = m->ww - w;
+
+  drw_setscheme(drw, scheme[LENGTH(colors)]);
+	drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
+	drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
+	drw_rect(drw, x, 0, w, bh, 1, 1);
+	x++;
+
+	/* process status text */
+	i = -1;
+	while (text[++i]) {
+		if (text[i] == '^' && !isCode) {
+		  isCode = 1;
+
+			text[i] = '\0';
+			w = TEXTW(text) - lrpad;
+			drw_text(drw, x, 0, w, bh, 0, text, 0);
+
+			x += w;
+
+			/* process code */
+			while (text[++i] != '^') {
+				if (text[i] == 'c') {
+					char buf[8];
+					memcpy(buf, (char*)text+i+1, 7);
+					buf[7] = '\0';
+					drw_clr_create(drw, &drw->scheme[ColFg], buf);
+					i += 7;
+				} else if (text[i] == 'b') {
+					char buf[8];
+					memcpy(buf, (char*)text+i+1, 7);
+					buf[7] = '\0';
+					drw_clr_create(drw, &drw->scheme[ColBg], buf);
+					i += 7;
+				} else if (text[i] == 'd') {
+					drw->scheme[ColFg] = scheme[SchemeNorm][ColFg];
+					drw->scheme[ColBg] = scheme[SchemeNorm][ColBg];
+				} else if (text[i] == 'r') {
+				  int rx = atoi(text + ++i);
+					while (text[++i] != ','){}
+          int ry = atoi(text + ++i);
+				  while (text[++i] != ','){}
+          int rw = atoi(text + ++i);
+          while (text[++i] != ','){}
+					int rh = atoi(text + ++i);
+					drw_rect(drw, rx + x, ry, rw, rh, 1, 0);
+				} else if (text[i] == 'f') {
+					x += atoi(text + ++i);
+				}
+			}
+
+			text = text + i + 1;
+			i=-1;
+			isCode = 0;
+		}
+	}
+
+	if (!isCode) {
+		w = TEXTW(text) - lrpad;
+		drw_text(drw, x, 0, w, bh, 0, text, 0);
+	}
+
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	free(p);
+	return ret;
 }
 
 void
@@ -1431,9 +1537,8 @@ setmfact(const Arg *arg)
 	arrange(selmon);
 }
 
-void
-setup(void)
-{
+void setup(void) {
+
 	int i;
 	XSetWindowAttributes wa;
 	Atom utf8string;
@@ -1469,16 +1574,20 @@ setup(void)
 	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
 	
-    /* init cursors */
+  /* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	
-    /* init appearance */
-    if (LENGTH(tags) > LENGTH(tagsel))
-		die("too few color schemes for the tags");
-	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
-	for (i = 0; i < LENGTH(colors); i++)
+  /* init appearance */
+  if (LENGTH(tags) > LENGTH(tagsel))
+  {die("too few color schemes for the tags");}
+	
+  //scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+  scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], 3);
+	
+  for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i], 3);
     tagscheme = ecalloc(LENGTH(tagsel), sizeof(Clr *));
 	for (i = 0; i < LENGTH(tagsel); i++)
