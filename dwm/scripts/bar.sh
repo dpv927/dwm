@@ -26,16 +26,18 @@ function get_netstate() {
 	esac
 }
 
-function get_resources() {
-    local free_out=$(free -h | grep 'Mem')
-
-    local MEMUSED=$(echo ${free_out} | awk '{print $3}')
-	local MEMTOT=$(echo ${free_out} | awk '{print $2}')
+function get_cpusage() {
 	local CPU=$(top -bn1 | grep 'Cpu' | awk '{print $2}')%
-    local memper=$(python ${SCRIPT_DIR}/div.py $MEMUSED $MEMTOT)%
+  printf "%s󰍛 %s\n" "${SEP}" "${CPU}"
+}
 
-    # Prints the RAM and CPU usage
-    printf "%s %s (%s)\n%s󰍛 %s\n" "${SEP}" "${MEMUSED}" "${memper}" "${SEP}" "${CPU}"
+function get_ramusage() {
+  local free_out=$(free -h | grep 'Mem')
+  local MEMUSED=$(echo ${free_out} | awk '{print $3}')
+	local MEMTOT=$(echo ${free_out} | awk '{print $2}')
+  local MEMPER=$(python ${SCRIPT_DIR}/div.py $MEMUSED $MEMTOT)%
+
+  printf "%s %s (%s)\n" "${SEP}" "${MEMUSED}" "${MEMPER}"
 }
 
 function get_kernel() {
@@ -51,10 +53,11 @@ function get_netraffic() {
 while true
 do
     upperbar=""
-    upperbar="$upperbar$(get_keyboard)"
-    upperbar="$upperbar$(get_netstate)"    
+    #upperbar="$upperbar$(get_keyboard)"
+    #upperbar="$upperbar$(get_netstate)"    
     upperbar="$upperbar$(get_netraffic)"
-    upperbar="$upperbar$(get_resources)"
+    upperbar="$upperbar$(get_ramusage)"
+    upperbar="$upperbar$(get_cpusage)"
     upperbar="$upperbar$(get_kernel)"
     upperbar="$upperbar$(get_hour)"
 

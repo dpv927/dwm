@@ -6,18 +6,18 @@
 #include "themes/catppuccin.h"
 
 /* Patch: Vanity gaps. Gaps between windows */ 
-static const unsigned int gappih    = 30;   
-static const unsigned int gappiv    = 30;   
-static const unsigned int gappoh    = 30;
-static const unsigned int gappov    = 30;
+static const unsigned int gappih    = 10;   
+static const unsigned int gappiv    = 10;   
+static const unsigned int gappoh    = 10;
+static const unsigned int gappov    = 10;
 static const int smartgaps          = 0;    
 
 /* Patch: Statuspadding. Bar inner padding */
 static const int horizpadbar        = 0;
-static const int vertpadbar         = 40;
+static const int vertpadbar         = 20;
 
 /* Some Dwm settings */
-static const unsigned int borderpx  = 8;
+static const unsigned int borderpx  = 2;
 static const unsigned int snap      = 32;
 static const int showbar            = 1;
 static const int topbar             = 1;
@@ -29,8 +29,8 @@ static const int topbar             = 1;
  * At the fonts[] array, you can define various fonts  
  * you want to have some backup fonts
  * * * * */
-static const char* fonts[]          = { "Jetbrains Mono Nerd Font:size=12" };
-static const char  dmenufont[]      = "Jetbrains Mono Nerd Font:size=12";
+static const char* fonts[]          = { "Jetbrains Mono Nerd Font:size=10" };
+static const char  dmenufont[]      = "Jetbrains Mono Nerd Font:size=10";
 
 /* Bar color theme. Defines the color of the bar and windows colors.
  * The order is the following one: {foreground, background, border}.
@@ -118,7 +118,7 @@ static const Layout layouts[] = {
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
     { MODKEY,                       XK_d,      spawn,          SHCMD("dmenu_run") },
-    { MODKEY,	                    XK_Return, spawn,          SHCMD("st") },
+    { MODKEY,	                    XK_Return, spawn,          SHCMD("alacritty") },
     { MODKEY,              		    XK_f,	   spawn,          SHCMD("firefox") },
     { MODKEY,                       XK_s,      spawn,          SHCMD("scrot") },
     { MODKEY,                       XK_b,      togglebar,      {0} },
