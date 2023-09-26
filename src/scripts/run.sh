@@ -10,15 +10,15 @@ SCRIPTS_DIR="${DWM_DIR}/scripts"
 feh --no-fehbg --bg-fill "${WALLPAPER_DIR}/wallpaper.png"
 
 # Load X settings
-killall xsettingsd
-xsettingsd --config="${CONFIG_DIR}/xsettingsd" &
-xrdb -merge ~/.Xresources
+#killall xsettingsd
+#xsettingsd --config="${CONFIG_DIR}/xsettingsd" &
+#xrdb -merge ~/.Xresources
 
 # Start dwm bar utils
 sh "${SCRIPTS_DIR}/bar.sh" &
 
 # Start picom compositor
-picom &
+# picom &
 
 # Start dwm
 while type dwm >/dev/null; do

@@ -18,8 +18,8 @@ DWM_DIR="${HOME}/.config/dwm"
 GIT_DIR="${sdir}/src"
 
 # Update repo files
-rm -rf "${GIT_DIR}/dwm"
-cp -r "${DWM_DIR}/*" "${GIT_DIR}"
+rm -rf "${GIT_DIR}/*"
+cp -r "${DWM_DIR}/*" "${GIT_DIR}/"
 
 # Show changes
 git status
