@@ -7,6 +7,16 @@
 #include "fibonacci.h"
 #include "themes/catppuccin.h"
 
+/* Patch: Custom rate. Sets the fps to a fixed number.
+ * Warning: Its not recomendable to use a number above your
+ * screen refresh rate. */
+static const unsigned int fps       = 60;
+
+/* Patch: Follow window. If the value is 1, when you send
+ * a window to a different workspace, you will also go to
+ * that workspace. */
+static const unsigned int followwin = 1;
+
 /* Patch: Underline tags */
 static const unsigned int ulinepad      = 0;
 static const unsigned int ulinestroke   = 6;
@@ -100,7 +110,7 @@ static const int lockfullscreen = 1;    // 1 will force focus on the fullscreen 
  * statusbar and func will be the function to invoke to organize the windows. 
  * * * * */
 static const Layout layouts[] = {
-    { "[]=",      tile },
+    { "<@>",      tile },
     { "><>",      NULL },
     { "[\\]",     dwindle },
     { "[@]",      spiral },
@@ -203,6 +213,7 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_comma,   tagmon,         {.i = -1 } },
     { MODKEY|ShiftMask,             XK_period,  tagmon,         {.i = +1 } },
     { MODKEY|ShiftMask,             XK_f,       fullscreen,     {0} },
+	{ MODKEY|ShiftMask,             XK_l,       layoutscroll,   {.i = +1 } },
 
     /* --- Tag keys ---*/
     TAGKEYS(                        XK_1,                       0)
@@ -223,7 +234,7 @@ static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
     { ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
     { ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
+    //{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
     { ClkStatusText,        0,              Button2,        spawn,          SHCMD(terminal) },
     { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
     { ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },

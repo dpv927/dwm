@@ -8,7 +8,8 @@ enum ColorScheme { SchemeNorm, SchemeSel };
 enum EwmhAtoms { 
     NetSupported, NetWMName, NetWMState, NetWMCheck,
     NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-    NetWMWindowTypeDialog, NetClientList, NetLast 
+    NetWMWindowTypeDialog, NetClientList, NetClientInfo, 
+    NetLast
 };
 
 enum DefaultAtoms { 
@@ -17,8 +18,8 @@ enum DefaultAtoms {
 };
 
 enum Clicks { 
-    ClkTagBar, ClkLtSymbol, ClkStatusText,
-     ClkWinTitle, ClkClientWin, ClkRootWin, ClkLast 
+    ClkTagBar, ClkLtSymbol, ClkStatusText, 
+    ClkClientWin, ClkRootWin, ClkLast 
 };
 
 /* Structs definition */
@@ -95,6 +96,7 @@ struct Monitor {
 	Monitor *next;
 	Window barwin;
 	const Layout *lt[2];
+    int currlt; // current Layout
 };
 
 struct Rule {
