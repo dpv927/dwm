@@ -33,6 +33,7 @@ Status Bar |  |
 <a href="https://dwm.suckless.org/patches/rainbowtags/">Rainbowtags</a> | Allows each tag to be an independent/unique color when selected |
 <a href="https://dwm.suckless.org/patches/statuspadding/">Statuspadding</a> | Makes horizontal and vertical padding in the status bar configurable |
 <a href="https://dwm.suckless.org/patches/status2d/">Status2d</a> | Allows colors and rectangle drawing in the status bar |
+<a href="https://dwm.suckless.org/patches/notitle/">Notitle</a> | Doesn't show the title of the selected window at the status bar |
 
 Layouts | |
 --- | --- |
@@ -41,8 +42,14 @@ Layouts | |
 Windows | |
 --- | --- |
 <a href="https://dwm.suckless.org/patches/vanitygaps/">Vanity gaps</a> | Adds gaps between windows |
+<a href="https://github.com/FT-Labs/pdwm/blob/master/patches/dwm-6.3-patches/dwm-preserveonrestart-6.3.diff">Preserveonrestart</a> |  Doesnt let all windows mix up into tag 1 after restarting dwm |
+<a href="#">Follow window (selfmade)</a> | Lets you configure the decision to follow a window when you move it to another workspace |
 
-## Install 
+General | |
+--- | --- |
+<a href="">Easy rate (selfmade)</a> | Lets you configure the refresh rate of dwm (based on <a href="https://dwm.suckless.org/patches/refreshrate/">refreshrate</a> ) |
+
+## Install
 The `install.sh` file makes it easy for you to install my dwm configuration. This script has several possible arguments that can vary according to your needs. So I advise you to clone the repository and use the `-h` flag as a script parameter to see the options:
 
 ```bash
