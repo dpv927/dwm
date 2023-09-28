@@ -23,10 +23,11 @@ yellow='\033[1;33m'
 
 # Define dwm working directory
 CONFIG_DIR="${HOME}/.config"
-DWM_DIR="${CONFIG}/dwm"
+DWM_DIR="${CONFIG_DIR}/dwm"
 
-function perror() {
-    printf "${red}Error:${reset} %s\n" "${1}"
+function error_exit() {
+    printf "${red}Error:${reset} Something went wrong.\n"
+    exit 1
 }
 function pwarning() {
     printf "${yellow}Warning:${reset} %s\n" "${1}"
@@ -34,18 +35,10 @@ function pwarning() {
 function pinfo() {
     printf "${green}Info:${reset} %s\n" "${1}"
 }
-function buildconfig() {
-    cd ${DWM_DIR}
-    pinfo "Compiling and installing dwm..."
-    make clean install || perror "Something went wrong" && exit 1
-
-    # Dwm was successfully installed
-    pinfo "Dwm has been installed"
-}
 
 # Check if args > 0
 if [ $# -eq 0 ]; then
-  perror "At least one argument is required"
+  perror "At least one argument is required."
   exit 1
 fi
 
@@ -66,57 +59,57 @@ if [ ${1} == "${override}" ]; then
 
         # Try to make the backup dir and notify the user if the
         # process failed
-        mv ${DWM_DIR} ${BACKUP_DIR} || perror "Something went wrong" && exit 1
+        mv ${DWM_DIR} ${BACKUP_DIR} || error_exit
         pinfo "Successfully created a backup at ${BACKUP_DIR}."
     else
         # There is no dwm config directory
-        pwarning "The directory ${DWM_DIR} dont exists...Creating ${DWM_DIR}"
-        mkdir -p ${DWM_DIR}
+        pwarning "The directory ${DWM_DIR} does not exist."
     fi
 
-    # Now we want to copy all the config from src/ to ~/.config/dwm
-    pinfo "Copiying all the files from ./src/ to ${DWM_DIR}"
-    cp -r src/* ${DWM_DIR} || perror "Something went wrong" && exit 1
+    # Create new directory ~/.config/dwm
+    pinfo "Creating directory ${DWM_DIR}."
+    mkdir -p ${DWM_DIR} || error_exit
 
-    # Everying looks fine.
-    pinfo "The script has finished...exiting"
+    # Now we want to copy all the config from src/ to ~/.config/dwm
+    pinfo "Copiying all the files from ./src/ to ${DWM_DIR}."
+    cp -r src/* ${DWM_DIR} || error_exit
 
 elif [ ${1} == "${rewrite}" ]; then
 
     if ! [ -d "${DWM_DIR}" ]; then
         # There is no dwm config directory
-        pwarning "The directory ${DWM_DIR} dont exists...Creating ${DWM_DIR}"
-        mkdir -p ${DWM_DIR}
+        pwarning "The directory ${DWM_DIR} does not exist."
+        pinfo "Creating directory ${DWM_DIR}."
+        mkdir -p ${DWM_DIR} || error_exit
     fi
 
     # Copy all the files without hesitation
-    pinfo "Rewriting the config at ${DWM_DIR}"
-    cp -r src/* ${DWM_DIR} || perror "somnething went wrong" || exit 1
-
-    # Everying looks fine.
-    pinfo "The script has finished...exiting"
+    pinfo "Rewriting the config at ${DWM_DIR}."
+    cp -r src/* ${DWM_DIR} || error_exit
 
 elif [ ${1} == "${install}" ]; then
 
-    if ! [ -d "${DWM_DIR}" ]; then
+    if [ -d "${DWM_DIR}" ]; then
         # Cannot install if ~/.config/dwm exists
-        perror "The directory ${DWM_DIR} already exists...Exiting"
+        pwarning "The directory ${DWM_DIR} already exists...Exiting."
         exit 1
     else
-        pinfo "Creating the directory ${DWM_DIR}"
-        mkdir -p ${DWM_DIR}
+        pinfo "Creating the directory ${DWM_DIR}."
+        mkdir -p ${DWM_DIR} || error_exit
     fi
 
     # Copy all the files
     pinfo "Installing the config at ${DWM_DIR}"
-    cp -r src/* ${DWM_DIR} || perror "somnething went wrong" || exit 1
+    cp -r src/* ${DWM_DIR} || error_exit
 
-    # Build all
-    buildconfig
+    pwarning "Dwm wont be available until you run 'make clean install' at ${DWM_DIR}"
 
 elif [ ${1} == ${help} ]; then
     # just print the help file
-    cat usage.txt || perror "The help file has been deleted"
+    cat install-usage.txt || error_exit
 else
-    perror "Unrecognized option '${1}'"
+    perror "Unrecognized option '${1}'."
 fi
+
+# Everying looks fine.
+pinfo "The script has finished correctly."

@@ -1,13 +1,13 @@
 Usage:
 
--o:   Deletes the config at '~/.config/dwm' if exists and copies my 
-       config to that route. It makes a backup.
+-o:   Makes a bacup of '~/.config/dwm' if exists and copies my 
+      config to that route.
  
 -r:   Only makes a cp -r src/* '~/.config/dwm/'. This command does not
-      make any backup.
+      make any backup. Maybe is not recommended.
 
 -i:   Checks if '~/.config/dwm' exists. Only copies my config to that
-       path if the mentioned path dont exists. If everything is fine, 
+       path if the mentioned path dont exist. If everything is fine, 
        compiles and installs dwm.
       
 -h:   Shows this message.
