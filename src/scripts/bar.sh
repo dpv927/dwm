@@ -4,6 +4,7 @@
 IFACE=$(route | grep 'default' | head -n1 | awk '{print $8}')
 SCRIPT_DIR=".config/dwm/scripts"
 SEP="   "
+SEP2=" "
 # End of variables
 
 # Color variables declaration
@@ -59,6 +60,11 @@ function get_netraffic() {
     printf "%s%s\n" "${SEP}" "${output}"
 }
 
+function get_battery () {
+    local bat=$(cat /sys/class/power_supply/BAT0/capacity)%
+    printf "%s^c$magenta^ ^c$reset^%s\n" "${SEP}" "${bat}"
+}
+
 while true
 do
     upperbar=""
@@ -69,7 +75,7 @@ do
     upperbar="$upperbar$(get_cpusage)"
     upperbar="$upperbar$(get_kernel)"
     upperbar="$upperbar$(get_hour)"
-
+    upperbar="$upperbar${SEP2}"
     xsetroot -name "$upperbar"
     sleep 1
 done
