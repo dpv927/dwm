@@ -1,5 +1,5 @@
 <div align="center"> 
-  <img src="src/resources/logo.png" height='200'>
+  <img src="src/resources/logo.png" height='170'>
 </div>
 
 <img src="src/resources/scr1.png">
@@ -27,12 +27,20 @@ In this repository you will find my rice for <a href="https://dwm.suckless.org/"
 - <a href="https://wiki.archlinux.org/title/feh">feh</a>
 
 **Applied Patches**
-- <a href="https://dwm.suckless.org/patches/vanitygaps/">Vanity gaps</a>
-- <a href="https://dwm.suckless.org/patches/rainbowtags/">Rainbowtags</a>
-- <a href="https://dwm.suckless.org/patches/statuspadding/">Statuspadding</a>
-- <a href="https://dwm.suckless.org/patches/underlinetags/">Underlinetags</a>
-- <a href="https://dwm.suckless.org/patches/fibonacci/">Fibonacci</a>
-- <a href="https://dwm.suckless.org/patches/status2d/">Status2d</a>
+
+Status Bar |  | 
+--- | --- |
+<a href="https://dwm.suckless.org/patches/rainbowtags/">Rainbowtags</a> | Allows each tag to be an independent/unique color when selected |
+<a href="https://dwm.suckless.org/patches/statuspadding/">Statuspadding</a> | Makes horizontal and vertical padding in the status bar configurable |
+<a href="https://dwm.suckless.org/patches/status2d/">Status2d</a> | Allows colors and rectangle drawing in the status bar |
+
+Layouts | |
+--- | --- |
+<a href="https://dwm.suckless.org/patches/fibonacci/">Fibonacci</a> | Arranges all windows in Fibonacci tiles |
+
+Windows | |
+--- | --- |
+<a href="https://dwm.suckless.org/patches/vanitygaps/">Vanity gaps</a> | Adds gaps between windows |
 
 ## Install 
 The `install.sh` file makes it easy for you to install my dwm configuration. This script has several possible arguments that can vary according to your needs. So I advise you to clone the repository and use the `-h` flag as a script parameter to see the options:
