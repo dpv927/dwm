@@ -25,6 +25,7 @@ In this repository you will find my rice for <a href="https://dwm.suckless.org/"
 - <a href="https://archlinux.org/packages/core/x86_64/make/">make</a>
 - <a href="https://wiki.archlinux.org/title/python">python</a>
 - <a href="https://wiki.archlinux.org/title/feh">feh</a>
+- <a href="https://man.archlinux.org/man/route.8.en">route</a>
 
 **Applied Patches**
 
