@@ -1,4 +1,4 @@
-#include "themes/catppuccin.h"
+#include "themes/onedark_pro.h"
 
 /* Patch: bar height */
 static const int user_bt = 20;
