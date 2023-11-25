@@ -2,9 +2,7 @@
   <img src="src/resources/logo.png" height='170'>
 </div>
 
-<img src="src/resources/scr1.png">
-<img src="src/resources/scr2.png">
-<img src="src/resources/scr3.png">
+<img src="src/resources/preview.png">
 
 <h1>
   <a href="#--------">
