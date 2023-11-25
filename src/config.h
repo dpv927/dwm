@@ -19,23 +19,23 @@ static const unsigned int followwin = 1;
 
 /* Patch: Underline tags */
 static const unsigned int ulinepad      = 0;
-static const unsigned int ulinestroke   = 6;
+static const unsigned int ulinestroke   = 3;
 static const unsigned int ulinevoffset  = 0;
 static const int ulineall               = 0;
 
 /* Patch: Vanity gaps. Gaps between windows */ 
-static const unsigned int gappih    = 20;   
-static const unsigned int gappiv    = 20;   
-static const unsigned int gappoh    = 20;
-static const unsigned int gappov    = 30;
+static const unsigned int gappih    = 5;   
+static const unsigned int gappiv    = 5;   
+static const unsigned int gappoh    = 5;
+static const unsigned int gappov    = 5;
 static const int smartgaps          = 0;    
 
 /* Patch: Statuspadding. Bar inner padding */
 static const int horizpadbar        = 0;
-static const int vertpadbar         = 35;
+static const int vertpadbar         = 20;
 
 /* Some Dwm settings */
-static const unsigned int borderpx  = 4;
+static const unsigned int borderpx  = 0;
 static const unsigned int snap      = 32;
 static const int showbar            = 1;
 static const int topbar             = 1;
@@ -47,7 +47,7 @@ static const int topbar             = 1;
  * At the fonts[] array, you can define various fonts  
  * you want to have some backup fonts
  * * * * */
-static const char* fonts[] = { "Jetbrains Mono Nerd Font:size=11" };
+static const char* fonts[] = { "Cascadia Code:size=12" };
 
 /* Bar color theme. Defines the color of the bar and windows colors.
  * The order is the following one: {foreground, background, border}.
@@ -59,8 +59,8 @@ static const char* fonts[] = { "Jetbrains Mono Nerd Font:size=11" };
  *  bar and its items.
  * * * * */
 static const char* colors[][3] = {
-	[SchemeNorm] = { white, black, border },
-	[SchemeSel]  = { title, black, border },
+	[SchemeNorm] = { foreground, background, background },
+	[SchemeSel]  = { foreground, background, background },
 };
 
 /* Bar tag colors. Defines the foreground and background colors
@@ -71,13 +71,13 @@ static const char* colors[][3] = {
  * the foreground of the tag will be #col1 and the background #col2.
  * * * * */
 static const char *tagsel[][2] = {
-    { magenta,  active },
-    { yellow,   active },
-    { green,    active },
-    { red,      active },
-    { blue,     active },
-    { cyan,     active },
-    { magenta,  active }
+  { tagfg,  background },
+  { tagfg,  background },
+  { tagfg,  background },
+  { tagfg,  background },
+  { tagfg,  background },
+  { tagfg,  background },
+  { tagfg,  background },
 };
 
 /* The tags[] array defines the icons or characters that will

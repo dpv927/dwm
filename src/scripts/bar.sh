@@ -8,11 +8,11 @@ SEP2=" "
 # End of variables
 
 # Color variables declaration
-black="#292d3d"
-red="#e78284"
-green="#a6d189"
-yellow="#e5c890"
-magenta="#ca9ee6"
+black="#101318"
+red="#e06b74"
+green="#74ba81"
+yellow="#efca84"
+magenta="#c58af0"
 reset="#c6d0f5"
 # End of color variables
 

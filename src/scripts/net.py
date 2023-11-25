@@ -2,8 +2,8 @@ import psutil
 import time
 
 # Define the output color
-blue="#8cacee"
-reset="#c6d0f5"
+blue="#71a5e9"
+reset="#aab1be"
 
 def net_data(interval=1):
     pre = psutil.net_io_counters()
