@@ -29,6 +29,10 @@ function error_exit() {
     printf "${red}Error:${reset} Something went wrong.\n"
     exit 1
 }
+function perror() {
+  printf "${red}Error:${reset} ${1}.\n"
+  exit 1
+}
 function pwarning() {
     printf "${yellow}Warning:${reset} %s\n" "${1}"
 }
