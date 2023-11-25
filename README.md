@@ -1,6 +1,7 @@
 <div align="center"> 
   <img src="src/resources/logo.png" height='170'>
 </div>
+<br> 
 
 <img src="src/resources/preview.png">
 
