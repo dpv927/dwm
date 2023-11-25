@@ -1,5 +1,5 @@
 <div align="center"> 
-  <img src="src/resources/logo.png" height='170'>
+  <img src="src/resources/dwm_logo.png" height='170'>
 </div>
 <br> 
 
